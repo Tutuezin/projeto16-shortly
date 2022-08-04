@@ -3,7 +3,9 @@ import connection from "../database/pgsql.js";
 
 export async function signUp(req, res) {
   try {
-    res.sendStatus(200);
+    console.log("teste");
+
+    res.send("teste");
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
