@@ -21,7 +21,7 @@ async function validateSignUpSchema(req, res, next) {
   );
 
   if (userExists.length !== 0) {
-    return res.status(409);
+    return res.sendStatus(409);
   }
 
   next();
