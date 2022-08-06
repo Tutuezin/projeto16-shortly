@@ -21,24 +21,26 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: clientes; Type: TABLE; Schema: public; Owner: tutuzera
+-- Name: links; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.clientes (
+CREATE TABLE public.links (
     id integer NOT NULL,
-    nome character varying(50) NOT NULL,
-    cpf character varying(11) NOT NULL,
-    numero_compras integer DEFAULT 0 NOT NULL
+    "shortUrl" text NOT NULL,
+    url text NOT NULL,
+    "visitCount" integer DEFAULT 0 NOT NULL,
+    "userId" integer NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT '2022-08-06 17:43:58.843366'::timestamp without time zone NOT NULL
 );
 
 
-ALTER TABLE public.clientes OWNER TO tutuzera;
+ALTER TABLE public.links OWNER TO postgres;
 
 --
--- Name: clientes_id_seq; Type: SEQUENCE; Schema: public; Owner: tutuzera
+-- Name: links_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE SEQUENCE public.clientes_id_seq
+CREATE SEQUENCE public.links_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -47,53 +49,126 @@ CREATE SEQUENCE public.clientes_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.clientes_id_seq OWNER TO tutuzera;
+ALTER TABLE public.links_id_seq OWNER TO postgres;
 
 --
--- Name: clientes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: tutuzera
+-- Name: links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.clientes_id_seq OWNED BY public.clientes.id;
-
-
---
--- Name: clientes id; Type: DEFAULT; Schema: public; Owner: tutuzera
---
-
-ALTER TABLE ONLY public.clientes ALTER COLUMN id SET DEFAULT nextval('public.clientes_id_seq'::regclass);
+ALTER SEQUENCE public.links_id_seq OWNED BY public.links.id;
 
 
 --
--- Data for Name: clientes; Type: TABLE DATA; Schema: public; Owner: tutuzera
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
-COPY public.clientes (id, nome, cpf, numero_compras) FROM stdin;
-2	Benício Freire Sampaio	98765432100	6
-3	Orlando Pequeno Jesus	10293847560	1
-4	Olga Cascais Fortunato	01928374650	2
-5	Martinha Lima Zambujal	11992288445	2
-6	Anabela Baptista Soverosa	22883377446	6
-7	Raul Arouca Pederneiras	11889922385	1
-8	Chico Buarque de Holanda	65719484743	10
-9	Lucca Santarém Branco	48769275911	4
-10	Patrícia Toste Prudente	19847457596	3
-1	Allana Fidalgo Moreira	22222222222	4
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    name text NOT NULL,
+    email text NOT NULL,
+    password text NOT NULL,
+    "createdAt" timestamp without time zone DEFAULT '2022-08-06 17:43:58.843366'::timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
+-- Name: links id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.links ALTER COLUMN id SET DEFAULT nextval('public.links_id_seq'::regclass);
+
+
+--
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Data for Name: links; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.links (id, "shortUrl", url, "visitCount", "userId", "createdAt") FROM stdin;
 \.
 
 
 --
--- Name: clientes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: tutuzera
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.clientes_id_seq', 11, true);
+COPY public.users (id, name, email, password, "createdAt") FROM stdin;
+\.
 
 
 --
--- Name: clientes clientes_pkey; Type: CONSTRAINT; Schema: public; Owner: tutuzera
+-- Name: links_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.clientes
-    ADD CONSTRAINT clientes_pkey PRIMARY KEY (id);
+SELECT pg_catalog.setval('public.links_id_seq', 1, false);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_id_seq', 1, false);
+
+
+--
+-- Name: links links_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.links
+    ADD CONSTRAINT links_pk PRIMARY KEY (id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- Name: links links_fk0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.links
+    ADD CONSTRAINT links_fk0 FOREIGN KEY ("userId") REFERENCES public.users(id);
 
 
 --
