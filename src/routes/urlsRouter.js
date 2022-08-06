@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
   createShortenUrl,
+  deleteShortUrl,
   getUrl,
   openShortUrl,
 } from "../controllers/urlsController.js";
@@ -17,5 +18,6 @@ urlsRouter.post(
 );
 urlsRouter.get("/urls/:id", getUrl);
 urlsRouter.get("/urls/open/:shortUrl", openShortUrl);
+urlsRouter.delete("/urls/:id", validateToken, deleteShortUrl);
 
 export default urlsRouter;
