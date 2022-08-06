@@ -23,7 +23,15 @@ export async function createShortenUrl(req, res) {
 
 export async function getUrl(req, res) {
   const { id } = req.params;
-  console.log(id);
+
+  const { rows: searchUrl } = await urlRepository.searchUrlById(id);
+
+  if (searchUrl.length === 0) {
+    return res.sendStatus(404);
+  }
+
+  res.status(200).send(searchUrl);
+
   try {
   } catch (error) {
     console.error(error);

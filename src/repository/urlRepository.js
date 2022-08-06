@@ -7,6 +7,14 @@ async function createShorten(shortUrl, url, id) {
   );
 }
 
+async function searchUrlById(id) {
+  return connection.query(
+    `SELECT id, "shortUrl", url FROM links WHERE id = $1`,
+    [id]
+  );
+}
+
 export const urlRepository = {
   createShorten,
+  searchUrlById,
 };

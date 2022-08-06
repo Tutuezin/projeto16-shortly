@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createShortenUrl } from "../controllers/urlsController.js";
+import { createShortenUrl, getUrl } from "../controllers/urlsController.js";
 import { validateToken } from "../middlewares/validations/validadeToken.js";
 import { validateUrlSchema } from "../middlewares/validations/validateUrlSchema.js";
 
@@ -11,5 +11,6 @@ urlsRouter.post(
   validateUrlSchema,
   createShortenUrl
 );
+urlsRouter.get("/urls/:id", getUrl);
 
 export default urlsRouter;
