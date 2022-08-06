@@ -14,7 +14,22 @@ async function searchUrlById(id) {
   );
 }
 
+async function redirectShortUrl(shortUrl) {
+  return connection.query(`SELECT url FROM links WHERE "shortUrl" = $1`, [
+    shortUrl,
+  ]);
+}
+
+async function visitCount(shortUrl) {
+  return connection.query(
+    `UPDATE links SET "visitCount" = "visitCount" + 1 WHERE "shortUrl" = $1 `,
+    [shortUrl]
+  );
+}
+
 export const urlRepository = {
   createShorten,
   searchUrlById,
+  redirectShortUrl,
+  visitCount,
 };
