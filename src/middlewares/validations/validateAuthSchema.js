@@ -1,5 +1,7 @@
 import connection from "../../database/pgsql.js";
 import { signUpSchema, signInSchema } from "../../schemas/authSchema.js";
+import { authRepository } from "../../repository/authRepository.js";
+
 import bcrypt from "bcrypt";
 
 async function validateSignUpSchema(req, res, next) {
@@ -16,10 +18,7 @@ async function validateSignUpSchema(req, res, next) {
   }
 
   //VALIDATIONS
-  const { rows: userExists } = await connection.query(
-    `SELECT * FROM users WHERE email = $1`,
-    [email]
-  );
+  const { rows: userExists } = await authRepository.searchUser(email);
 
   if (userExists.length !== 0) {
     return res.sendStatus(409);
@@ -42,10 +41,7 @@ async function validateSignInSchema(req, res, next) {
   }
 
   //VALIDATIONS
-  const { rows: userExists } = await connection.query(
-    `SELECT * FROM users WHERE email = $1`,
-    [email]
-  );
+  const { rows: userExists } = await authRepository.searchUser(email);
 
   if (
     userExists.length === 0 ||

@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
-import connection from "../database/pgsql.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { authRepository } from "../repository/authRepository.js";
 
 dotenv.config();
 
@@ -12,12 +12,7 @@ export async function signUp(req, res) {
     const salt = await bcrypt.genSalt();
     const passwordHash = bcrypt.hashSync(password, salt);
 
-    await connection.query(
-      `
-    INSERT INTO users (name, email, password) VALUES ($1, $2, $3)
-    `,
-      [name, email, passwordHash]
-    );
+    await authRepository.createUser(name, email, passwordHash);
 
     res.status(201).send("User created!");
   } catch (error) {
