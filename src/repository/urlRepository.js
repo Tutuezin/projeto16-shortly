@@ -27,9 +27,20 @@ async function visitCount(shortUrl) {
   );
 }
 
+async function searchShortUrl(id) {
+  return connection.query(`SELECT * FROM links WHERE id = $1`, [id]);
+}
+
+async function deleteShortUrl(id) {
+  connection.query(`DELETE FROM links WHERE id = $1`, [id]);
+  return;
+}
+
 export const urlRepository = {
   createShorten,
   searchUrlById,
   redirectShortUrl,
   visitCount,
+  searchShortUrl,
+  deleteShortUrl,
 };

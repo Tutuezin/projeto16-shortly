@@ -59,24 +59,22 @@ export async function openShortUrl(req, res) {
   }
 }
 
-export async function deleteShortUrl(req, res) {
+export async function deleteShortenUrl(req, res) {
   const { user } = res.locals;
   const { id } = req.params;
-  try {
-    const { rows: shortUrlExists } = await connection.query(
-      `SELECT * FROM links WHERE id = $1`,
-      [id]
-    );
 
-    if (shortUrlExists[0].userId !== user.id) {
-      return res.sendStatus(401);
-    }
+  try {
+    const { rows: shortUrlExists } = await urlRepository.searchShortUrl(id);
 
     if (shortUrlExists.length === 0) {
       return res.sendStatus(404);
     }
 
-    await connection.query(`DELETE FROM links WHERE id = $1`, [id]);
+    if (shortUrlExists[0].userId !== user.id) {
+      return res.sendStatus(401);
+    }
+
+    await urlRepository.deleteShortUrl(id);
 
     res.sendStatus(204);
   } catch (error) {
