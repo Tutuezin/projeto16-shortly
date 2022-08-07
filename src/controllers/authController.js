@@ -29,6 +29,6 @@ export async function signIn(req, res) {
     res.status(200).send({ name: user.name, token });
   } catch (error) {
     console.error(error);
-    res.status(500).send("caiu aqui");
+    res.sendStatus(500);
   }
 }
