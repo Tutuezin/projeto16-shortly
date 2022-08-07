@@ -1,4 +1,3 @@
-import connection from "../database/pgsql.js";
 import { nanoid } from "nanoid";
 import { urlRepository } from "../repository/urlRepository.js";
 
