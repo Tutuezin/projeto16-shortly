@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
 import { urlRepository } from "../repository/urlRepository.js";
+import connection from "../database/pgsql.js";
 
 export async function createShortenUrl(req, res) {
   const { user } = res.locals;
@@ -76,6 +77,17 @@ export async function deleteShortenUrl(req, res) {
     await urlRepository.deleteShortUrl(id);
 
     res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+    res.sendStatus(500);
+  }
+}
+
+export async function getRanking(req, res) {
+  try {
+    const { rows: allRankings } = await urlRepository.searchRankings();
+
+    res.status(200).send(allRankings);
   } catch (error) {
     console.error(error);
     res.sendStatus(500);
